@@ -12,9 +12,11 @@ class DatabaseViewModel extends ChangeNotifier {
       required String todoName,
       required bool isDone,
       String? id,
-      required DateTime entryTime}) async {
+      required DateTime entryTime,
+      String? url,
+      String? desc}) async {
     var todos_id = await _databaseService.addTodo(
-        context, todoName, isDone, id, entryTime);
+        context, todoName, isDone, id, entryTime, url, desc);
     notifyListeners();
 
     return todos_id;

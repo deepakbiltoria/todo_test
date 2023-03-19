@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/utils.dart';
+import '../widget/dialog.dart';
+import '../widget/task_details.dart';
 import '../widget/todo_widget.dart';
 
 import '/model/todo_model.dart';
@@ -17,6 +19,17 @@ class TodosScreen extends StatefulWidget {
 
 class _TodosScreenState extends State<TodosScreen> {
   final _newTodoNameController = TextEditingController();
+
+  void _saveTask(String desc, String url, String titleName) {
+    final taskName = titleName;
+    FirebaseFirestore.instance.collection('todos').add({
+      "name": taskName,
+      "url": url,
+      "desc": desc,
+      "date": DateTime.now(),
+      "strike": false
+    });
+  }
 
   String newTodoName = "";
 
@@ -41,7 +54,9 @@ class _TodosScreenState extends State<TodosScreen> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return Consumer<DatabaseViewModel>(
+                  return AddTaskPopUp();
+
+                  Consumer<DatabaseViewModel>(
                     builder: (context, database, _) {
                       return Padding(
                         padding: const EdgeInsets.all(20.0),
@@ -136,7 +151,16 @@ class _TodosScreenState extends State<TodosScreen> {
                 });
           }),
       appBar: AppBar(
-        title: Text('todo screen'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('todo screen '),
+            Text(
+              'App ver. 2.0.0+2',
+              style: Theme.of(context).textTheme.subtitle1,
+            )
+          ],
+        ),
       ),
       body: ListView(
         children: [

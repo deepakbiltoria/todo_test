@@ -11,13 +11,8 @@ class DatabaseService {
 
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  Future<dynamic> addTodo(
-    BuildContext context,
-    String todoName,
-    bool isDone,
-    String? id,
-    DateTime entryTime,
-  ) async {
+  Future<dynamic> addTodo(BuildContext context, String todoName, bool isDone,
+      String? id, DateTime entryTime, String? url, String? desc) async {
     var todo_Uid = const Uuid().v4();
 
     Todo todo = Todo(
@@ -25,7 +20,9 @@ class DatabaseService {
         id: id,
         isDone: isDone,
         todo_Uid: todo_Uid,
-        entryTime: Timestamp.fromDate(entryTime));
+        entryTime: Timestamp.fromDate(entryTime),
+        photoUrls: url,
+        entry: desc);
     String todos_Id = await todosCollectionReference
         .add(todo.toMap())
         .then((value) => value.id);
